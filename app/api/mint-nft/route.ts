@@ -86,12 +86,8 @@ export async function POST(request: NextRequest) {
       sellerFeeBasisPoints: 500,
       isMutable: true,
       maxSupply: 1,
-    }, { commitment: 'confirmed' })
-    
-    await metaplex.nfts().transfer({
-      nftOrSft: nft,
-      toOwner: userPublicKey,
-    })
+      tokenOwner: userPublicKey,
+    }, { commitment: 'finalized' })
 
     return NextResponse.json({
       success: true,
