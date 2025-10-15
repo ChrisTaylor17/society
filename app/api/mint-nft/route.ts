@@ -39,11 +39,14 @@ export async function POST(request: NextRequest) {
         timeout: 60000,
       }))
 
+    console.log('Downloading image from OpenAI...')
     const imageResponse = await fetch(imageUrl)
     const imageBuffer = await imageResponse.arrayBuffer()
     const imageFile = toMetaplexFile(Buffer.from(imageBuffer), 'nft.png')
     
+    console.log('Uploading image to Arweave...')
     const imageUri = await metaplex.storage().upload(imageFile)
+    console.log('Image uploaded to:', imageUri)
     
     const metadata = {
       name,
@@ -70,7 +73,9 @@ export async function POST(request: NextRequest) {
       },
     }
 
+    console.log('Uploading metadata...')
     const { uri } = await metaplex.nfts().uploadMetadata(metadata)
+    console.log('Metadata uploaded to:', uri)
 
     const userPublicKey = new PublicKey(walletAddress)
 
@@ -92,6 +97,7 @@ export async function POST(request: NextRequest) {
       success: true,
       mintAddress: nft.address.toBase58(),
       metadata: uri,
+      imageUri,
     })
   } catch (error: any) {
     console.error('Error minting NFT:', error)
