@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Connection, Keypair, PublicKey } from '@solana/web3.js'
-import { Metaplex, keypairIdentity, bundlrStorage } from '@metaplex-foundation/js'
+import { Metaplex, keypairIdentity, bundlrStorage, toMetaplexFile } from '@metaplex-foundation/js'
 
 export async function POST(request: NextRequest) {
   try {
