@@ -74,8 +74,15 @@ export async function POST(request: NextRequest) {
     const { nft } = await metaplex.nfts().create({
       uri,
       name,
+      symbol: 'SOE',
       sellerFeeBasisPoints: 500,
-      tokenOwner: userPublicKey,
+      isMutable: true,
+      maxSupply: 1,
+    }, { commitment: 'confirmed' })
+    
+    await metaplex.nfts().transfer({
+      nftOrSft: nft,
+      toOwner: userPublicKey,
     })
 
     return NextResponse.json({
