@@ -11,15 +11,21 @@ export async function POST(request: NextRequest) {
     }
 
     const connection = new Connection('https://api.devnet.solana.com', 'confirmed')
-    const payer = Keypair.generate()
     
-    try {
-      const airdropSignature = await connection.requestAirdrop(payer.publicKey, 1000000000)
-      await connection.confirmTransaction(airdropSignature)
-    } catch (airdropError) {
-      return NextResponse.json({ 
-        error: 'Devnet faucet rate limit reached. Please get SOL from https://faucet.solana.com and try again in a few minutes.' 
-      }, { status: 429 })
+    let payer: Keypair
+    if (process.env.SOLANA_PRIVATE_KEY) {
+      const secretKey = JSON.parse(process.env.SOLANA_PRIVATE_KEY)
+      payer = Keypair.fromSecretKey(Uint8Array.from(secretKey))
+    } else {
+      payer = Keypair.generate()
+      try {
+        const airdropSignature = await connection.requestAirdrop(payer.publicKey, 1000000000)
+        await connection.confirmTransaction(airdropSignature)
+      } catch (airdropError) {
+        return NextResponse.json({ 
+          error: 'Devnet faucet rate limit reached. Please add SOLANA_PRIVATE_KEY to environment variables or try again later.' 
+        }, { status: 429 })
+      }
     }
     
     const metaplex = Metaplex.make(connection)
