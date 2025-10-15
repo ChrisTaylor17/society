@@ -42,7 +42,7 @@ export default function Home() {
         <div className="flex justify-center mb-6">
           <Compass className="w-24 h-24 text-purple-400 animate-float" />
         </div>
-        <h1 className="text-6xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+        <h1 className="text-6xl font-black mb-6 bg-gradient-to-r from-red-500 to-slate-200 bg-clip-text text-transparent uppercase tracking-tight">
           Society of Explorers
         </h1>
         <p className="text-xl text-gray-300 max-w-2xl mx-auto">
@@ -60,8 +60,8 @@ export default function Home() {
           >
             <Link href={feature.href}>
               <div className="glass-card p-8 hover:bg-white/20 transition-all duration-300 cursor-pointer h-full">
-                <div className="text-purple-400 mb-4">{feature.icon}</div>
-                <h3 className="text-2xl font-bold mb-3">{feature.title}</h3>
+                <div className="text-red-500 mb-4">{feature.icon}</div>
+                <h3 className="text-2xl font-black mb-3 uppercase tracking-wide">{feature.title}</h3>
                 <p className="text-gray-300">{feature.description}</p>
               </div>
             </Link>
