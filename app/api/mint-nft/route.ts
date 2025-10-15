@@ -30,25 +30,28 @@ export async function POST(request: NextRequest) {
         timeout: 60000,
       }))
 
-    const imageResponse = await fetch(imageUrl)
-    const imageBuffer = await imageResponse.arrayBuffer()
-    const imageFile = toMetaplexFile(Buffer.from(imageBuffer), 'nft.png')
-    
-    const uploadedImageUri = await metaplex.storage().upload(imageFile)
-
     const metadata = {
       name,
       description,
-      image: uploadedImageUri,
+      image: imageUrl,
       attributes: attributes || [],
+      symbol: 'SOE',
+      seller_fee_basis_points: 500,
+      external_url: '',
       properties: {
         files: [
           {
-            uri: uploadedImageUri,
+            uri: imageUrl,
             type: 'image/png',
           },
         ],
         category: 'image',
+        creators: [
+          {
+            address: walletAddress,
+            share: 100,
+          },
+        ],
       },
     }
 
