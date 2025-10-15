@@ -2,7 +2,7 @@
 nixPkgs = ['nodejs_18']
 
 [phases.install]
-cmds = ['npm install express socket.io cors']
+cmds = ['npm install --no-package-lock express socket.io cors']
 
 [start]
 cmd = 'node server.js'

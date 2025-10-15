@@ -14,7 +14,7 @@ export async function generateNFTImage(prompt: string): Promise<string> {
       quality: "hd",
     })
 
-    return response.data[0].url || ''
+    return response.data?.[0]?.url || ''
   } catch (error) {
     console.error('Error generating image:', error)
     throw error
