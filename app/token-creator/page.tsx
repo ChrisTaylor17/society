@@ -32,7 +32,11 @@ export default function TokenCreator() {
 
   const updateAllocation = (index: number, field: 'address' | 'percentage', value: string | number) => {
     const newAllocations = [...allocations]
-    newAllocations[index][field] = value as any
+    if (field === 'address') {
+      newAllocations[index][field] = value as string
+    } else {
+      newAllocations[index][field] = value as number
+    }
     setAllocations(newAllocations)
   }
 
