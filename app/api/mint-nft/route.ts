@@ -13,8 +13,14 @@ export async function POST(request: NextRequest) {
     const connection = new Connection('https://api.devnet.solana.com', 'confirmed')
     const payer = Keypair.generate()
     
-    const airdropSignature = await connection.requestAirdrop(payer.publicKey, 2000000000)
-    await connection.confirmTransaction(airdropSignature)
+    try {
+      const airdropSignature = await connection.requestAirdrop(payer.publicKey, 1000000000)
+      await connection.confirmTransaction(airdropSignature)
+    } catch (airdropError) {
+      return NextResponse.json({ 
+        error: 'Devnet faucet rate limit reached. Please get SOL from https://faucet.solana.com and try again in a few minutes.' 
+      }, { status: 429 })
+    }
     
     const metaplex = Metaplex.make(connection)
       .use(keypairIdentity(payer))
