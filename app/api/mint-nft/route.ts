@@ -14,7 +14,10 @@ export async function POST(request: NextRequest) {
     
     let payer: Keypair
     if (process.env.SOLANA_PRIVATE_KEY) {
-      const secretKey = JSON.parse(process.env.SOLANA_PRIVATE_KEY)
+      const keyString = process.env.SOLANA_PRIVATE_KEY.trim()
+      const secretKey = keyString.startsWith('[') 
+        ? JSON.parse(keyString) 
+        : keyString.split(',').map(n => parseInt(n.trim()))
       payer = Keypair.fromSecretKey(Uint8Array.from(secretKey))
     } else {
       payer = Keypair.generate()
