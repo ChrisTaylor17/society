@@ -11,8 +11,13 @@ export async function POST(request: NextRequest) {
     }
 
     const connection = new Connection('https://api.devnet.solana.com', 'confirmed')
+    const payer = Keypair.generate()
+    
+    const airdropSignature = await connection.requestAirdrop(payer.publicKey, 2000000000)
+    await connection.confirmTransaction(airdropSignature)
     
     const metaplex = Metaplex.make(connection)
+      .use(keypairIdentity(payer))
       .use(bundlrStorage({
         address: 'https://devnet.bundlr.network',
         providerUrl: 'https://api.devnet.solana.com',
@@ -43,12 +48,7 @@ export async function POST(request: NextRequest) {
       uri,
       name,
       sellerFeeBasisPoints: 500,
-      creators: [
-        {
-          address: userPublicKey,
-          share: 100,
-        },
-      ],
+      tokenOwner: userPublicKey,
     })
 
     return NextResponse.json({
